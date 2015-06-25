@@ -33,6 +33,7 @@ This POC is heavily inspired by the Sinatra and RestClient gems and emulates the
 ### Client
 
 ```ruby
+# in file ers_client.rb
 require './fallaway.rb'
 require './usage.rb'
 
@@ -56,6 +57,7 @@ puts clouds.inspect
 ### Server
 
 ```ruby
+# in file ers.rb
 require './fallaway.rb'
 
 clouds = [] 
