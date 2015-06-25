@@ -2,6 +2,7 @@ require 'rack/request'
 require 'rack/response'
 require 'restclient'
 require 'json'
+require 'active_support/core_ext/hash/keys'
 
 class Fallaway
 
@@ -129,19 +130,36 @@ class HttpFallawayClient
   end
 
   def get(path)
-    RestClient.get("#{host}#{path}")
+    res = RestClient.get("#{host}#{path}")
+    parse_to_ruby_object(res)
   end
 
   def post(path, params)
-    RestClient.post("#{host}#{path}", JSON.generate(params), {:content_type => 'application/json'} )
+    res = RestClient.post("#{host}#{path}", JSON.generate(params), {:content_type => 'application/json'} )
+    parse_to_ruby_object(res)
   end
 
   def put(path, params)
-    RestClient.put("#{host}#{path}", JSON.generate(params), {:content_type => 'application/json'} )
+    res = RestClient.put("#{host}#{path}", JSON.generate(params), {:content_type => 'application/json'} )
+    parse_to_ruby_object(res)
   end
 
   def delete(path)
-    RestClient.delete("#{host}#{path}")
+    res = RestClient.delete("#{host}#{path}")
+    parse_to_ruby_object(res)
+  end
+
+  def parse_to_ruby_object(response)
+    object = JSON.parse(response) 
+    if object.respond_to? :keys 
+      hash = object
+      hash.symbolize_keys
+    else
+      array = object
+      array.each do |hash|
+        hash.symbolize_keys!
+      end
+    end 
   end
 
 end

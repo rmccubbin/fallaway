@@ -4,12 +4,12 @@ require './usage.rb'
 using_local, host = usage()
 
 if using_local
-  client = FallawayClient.new_client({file: './ers.rb'})
+  client = FallawayClient.new_client({file: './server.rb'})
 else
   client = FallawayClient.new_client({url: host})
 end
 
-client.post('/admin/clouds', {hello: 'bob'})
+client.post('/admin/messages', {hello: 'bob'})
 
-clouds = client.get('/clouds')
+clouds = client.get('/messages')
 puts clouds.inspect
