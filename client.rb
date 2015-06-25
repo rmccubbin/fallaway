@@ -11,5 +11,5 @@ end
 
 client.post('/admin/messages', {hello: 'bob'})
 
-clouds = client.get('/messages')
-puts clouds.inspect
+messages = client.get('/messages')
+puts messages.inspect

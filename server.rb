@@ -1,13 +1,13 @@
 require './fallaway.rb'
 
-clouds = [] 
+messages = [] 
 
 get '/messages' do
   puts 'returning list of messages'
-  clouds
+  messages
 end
 
 post '/admin/messages' do |params|
   puts "adding #{params.inspect}"
-  clouds << params
+  messages << params
 end

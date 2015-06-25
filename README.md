@@ -47,10 +47,10 @@ else
   client = FallawayClient.new_client({url: host})
 end
 
-client.post('/admin/clouds', {hello: 'bob'})
+client.post('/admin/messages', {hello: 'bob'})
 
-clouds = client.get('/clouds')
-puts clouds.inspect
+messages = client.get('/messages')
+puts messages.inspect
 ```
 
 ### Server
@@ -60,16 +60,16 @@ puts clouds.inspect
 
 require './fallaway.rb'
 
-clouds = [] 
+messages = [] 
 
-get '/clouds' do
-  puts 'returning list of clouds'
-  clouds
+get '/messages' do
+  puts 'returning list of messages'
+  messages
 end
 
-post '/admin/clouds' do |params|
+post '/admin/messages' do |params|
   puts "adding #{params.inspect}"
-  clouds << params
+  messages << params
 end
 ```
 
