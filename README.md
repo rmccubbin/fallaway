@@ -6,7 +6,7 @@ The purpose of the fallaway library is as a POC for creating a library which all
 
 Inspired by an article which I can no longer find which proposed that while in theory carving up a monolithic code base into micro services should be easy if you have nicely written code. In reality it tends to be very difficult because you share object representations, abstractions, interfaces and dependencies all over the code base even though it may be well written easy to understand code. Unpicking those things can become very difficult.
 
-The thought was well maybe instead of using dependency inject etc. in our code which usually does not actually prevent that type of issue. We should within a single code base simple write our components as if they were running in a microservice with nothing shared. Kindof bringing the inconvience of a micros service within your application ;-). However instead of being subject to the deployment, monitoring and performance overheads of creating a new microservice a library would allow the all the http calls to **fall away** and return to method calls if the service was in the same process.
+The thought was well maybe instead of using dependency inject etc. in our code which usually does not actually prevent that type of issue. We should within a single code base simple write our components as if they were running in a microservice with nothing shared. Kindof bringing the inconvience of a micros service within your application ;-). However instead of being subject to the deployment, monitoring and performance overheads of creating a new microservice a library would allow all the http calls to simply **fall away** and return to method calls if the service was in the same process.
 
 ## Usage
 
@@ -33,7 +33,8 @@ This POC is heavily inspired by the Sinatra and RestClient gems and emulates the
 ### Client
 
 ```ruby
-# in file ers_client.rb
+# ers_client.rb
+
 require './fallaway.rb'
 require './usage.rb'
 
@@ -57,7 +58,8 @@ puts clouds.inspect
 ### Server
 
 ```ruby
-# in file ers.rb
+# ers.rb
+
 require './fallaway.rb'
 
 clouds = [] 
@@ -88,7 +90,7 @@ $ bundle exec ruby ers_client.rb local
 
 ### Http Example
 ```bash
-$ bundle exec rackup ers.ru # run the server will be running on http://localhost:9292/clouds
+$ bundle exec rackup ers.ru # runs the server, visit http://localhost:9292/clouds
 
 # in another terminal
 $ bundle exec ruby ers_client.rb http http://localhost:9292
