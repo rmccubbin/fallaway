@@ -74,16 +74,20 @@ end
 ## Running the POC
 
 The POC can be run in either Local or HTTP mode
+First you will need to install the dependencies
+```bash
+bundle install
+```
 
 ### Local Example
 ```bash
-$ ruby ers_client.rb local
+$ bundle exec ruby ers_client.rb local
 ```
 
 ### Http Example
 ```bash
-$ rackup ers.ru # run the server will be running on http://localhost:9292/clouds
+$ bundle exec rackup ers.ru # run the server will be running on http://localhost:9292/clouds
 
 # in another terminal
-$ ruby ers_client.rb http http://localhost:9292
+$ bundle exec ruby ers_client.rb http http://localhost:9292
 ```
