@@ -1,3 +1,8 @@
+require 'rack/request'
+require 'rack/response'
+require 'restclient'
+require 'json'
+
 class Fallaway
 
   attr :fallaway 
@@ -52,6 +57,32 @@ class Fallaway
     @delete_apis[path] = block
   end
 
+  def call(env)
+    req = Rack::Request.new(env)
+    if req.get?
+      response_object = get(req.path)
+      return_as_json_response(response_object)
+    elsif req.post?
+      response_object = post(req.path, JSON.parse(req.body.read()))
+      return_as_json_response(response_object)
+    elsif req.put?
+      response_object = put(req.path, req.params)
+      return_as_json_response(response_object)
+    elsif req.delete?
+      response_object = delete(req.path)
+      return_as_json_response(response_object)
+    end
+  end
+
+  def return_as_json_response(response_object)
+    res = Rack::Response.new
+    if response_object
+      response_json = JSON.generate(response_object)
+      res.write response_json
+    end
+    res.finish
+  end
+
 end
 
 def get(path, &block)
@@ -91,4 +122,26 @@ class LocalFallawayClient
 end
 
 class HttpFallawayClient
+  attr :host
+
+  def initialize(host)
+    @host = host
+  end
+
+  def get(path)
+    RestClient.get("#{host}#{path}")
+  end
+
+  def post(path, params)
+    RestClient.post("#{host}#{path}", JSON.generate(params), {:content_type => 'application/json'} )
+  end
+
+  def put(path, params)
+    RestClient.put("#{host}#{path}", JSON.generate(params), {:content_type => 'application/json'} )
+  end
+
+  def delete(path)
+    RestClient.delete("#{host}#{path}")
+  end
+
 end
