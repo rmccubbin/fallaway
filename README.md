@@ -19,8 +19,6 @@ In local mode you can pass in a file which provides a fallaway server. When you 
 In http mode we use rack to run your fallaway server as an http server and you must provide a config.ru file to tell rack how to setup your server. You can then run the server using:
 ```bash
 $ rackup config.ru
-# or in our poc case
-$ rackup ers.ru
 ```
 
 The client should be given the host address of the server you just started to send requests to.
@@ -33,7 +31,7 @@ This POC is heavily inspired by the Sinatra and RestClient gems and emulates the
 ### Client
 
 ```ruby
-# ers_client.rb
+# client.rb
 
 require './fallaway.rb'
 require './usage.rb'
@@ -42,7 +40,7 @@ using_local, host = usage()
 
 if using_local
   # Run in local mode where the service is provided by a file and run in the same process
-  client = FallawayClient.new_client({file: './ers.rb'})
+  client = FallawayClient.new_client({file: './server.rb'})
 else
   # Run in http mode where the service is provided by a full microservice 
   # running at a given host
@@ -58,7 +56,7 @@ puts clouds.inspect
 ### Server
 
 ```ruby
-# ers.rb
+# server.rb
 
 require './fallaway.rb'
 
@@ -85,13 +83,13 @@ bundle install
 
 ### Local Example
 ```bash
-$ bundle exec ruby ers_client.rb local
+$ bundle exec ruby client.rb local
 ```
 
 ### Http Example
 ```bash
-$ bundle exec rackup ers.ru # runs the server, visit http://localhost:9292/clouds
+$ bundle exec rackup config.ru # runs the server, visit http://localhost:9292/clouds
 
 # in another terminal
-$ bundle exec ruby ers_client.rb http http://localhost:9292
+$ bundle exec ruby client.rb http http://localhost:9292
 ```
