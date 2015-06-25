@@ -145,3 +145,14 @@ class HttpFallawayClient
   end
 
 end
+
+class FallawayClient
+  def self.new_client(options)
+    if options[:file] != nil
+      return LocalFallawayClient.new(options[:file])
+    end
+    if options[:url] != nil
+      return HttpFallawayClient.new(options[:url])
+    end
+  end
+end
